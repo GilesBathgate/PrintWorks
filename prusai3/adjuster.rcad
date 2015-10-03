@@ -1,49 +1,46 @@
-
 module arrow(){
-translate([0,5.9,5]){
- cube([1,4.22,1],c=true);
- cube([4.5,1,1],c=true);
+  translate([0,5.9,5]){
+    cube([1,4.22,1],c=true);
+    cube([4.5,1,1],c=true);
+  }
+  translate([0,0,5])
+  difference(){
+    cylinder(r=6.5,h=1,c=true);
+    cylinder(r=5.5,h=1,c=true);
+    translate([-10,0,0])cube([20,20,10],c=true);
+    rotate([0,0,45])translate([0,10,0])cube([20,20,10],c=true);
+  }
+  translate([-0.9,-6,4.5])rotate([0,0,180])prism(h=1,s=3,a=1);
 }
 
-translate([0,0,5])
-difference(){
-cylinder(r=6.5,h=1,c=true);
-cylinder(r=5.5,h=1,c=true);
-translate([-10,0,0])cube([20,20,10],c=true);
-rotate([0,0,45])translate([0,10,0])cube([20,20,10],c=true);
-}
+module adjuster(){
+  diameter=20;
+  height=5;
+  difference(){
+    cylinder(d=diameter,h=height);
+    translate([0,0,1])prism(h=height,s=6,r=3.5);
+    cylinder(d=3.4,h=100,$fn=30);
+    rotate([0,0,15])
+    for(i=[0:30:360])
+     rotate([0,0,i])
+      translate([0,diameter/2+0.2,-10])
+       cylinder(d=2.5,h=40,$fn=20,c=true);
 
-translate([-0.9,-6,4.5])rotate([0,0,180])prism(h=1,s=3,a=1);
-}
-
-module adjuster() {
-diameter=20;
-height=5;
-
-difference(){
- cylinder(d=diameter,h=height);
- translate([0,0,1])cylinder(h=height,$fn=6,r=3.5);
- cylinder(d=3.4,h=100,$fn=30);
-
- rotate([0,0,15])
- for(i=[0:30:360])
-  rotate([0,0,i])
-   translate([0,10.2,0])
-    cylinder(d=2.5,h=100,$fn=20,c=true);
- 
- arrow();
-}
-
-
+    arrow();
+  }
 }
 
 module main(){
-difference(){
-adjuster();
-translate([0,0,6.5])
-rotate([-90,0,0])
-rotate_extrude($fn=60)translate([10,0])rotate([0,0,45])square([4,2]);
-}
+  difference(){
+    adjuster();
+    translate([0,0,6.5])
+     rotate([-90,0,0])
+      rotate_extrude($fn=60)
+       translate([10,0])
+        rotate([0,0,45])
+         square([4,2]);
+  }
 }
 
-main();
+bound$()
+ main();
