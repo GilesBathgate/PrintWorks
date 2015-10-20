@@ -19,12 +19,12 @@ module adjuster(){
   difference(){
     cylinder(d=diameter,h=height,$fn=24);
     translate([0,0,1])prism(h=height,s=6,r=3.5);
-    cylinder(d=3.4,h=100,$fn=30);
+    cylinder(d=3.4,h=100,$fn=16);
     rotate([0,0,15])
-    for(i=[0:30:360])
+    for(i=[0:30:330])
      rotate([0,0,i])
       translate([0,diameter/2+0.2,-10])
-       cylinder(d=2.5,h=40,$fn=20,c=true);
+       cylinder(d=2.5,h=40,$fn=16,c=true);
 
     arrow();
   }
