@@ -30,15 +30,19 @@ module adjuster(){
   }
 }
 
+module chamfer(){
+ translate([0,0,6.5])
+  rotate([180,0,0])
+   rotate_extrude($fn=24)
+    translate([10,0])
+     rotate([0,0,45])
+      square([4,2]);
+}
+
 module main(){
   difference(){
     adjuster();
-    translate([0,0,6.5])
-     rotate([-90,0,0])
-      rotate_extrude($fn=24)
-       translate([10,0])
-        rotate([0,0,45])
-         square([4,2]);
+    chamfer();
   }
 }
 
