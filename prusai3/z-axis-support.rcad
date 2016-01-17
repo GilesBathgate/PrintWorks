@@ -1,0 +1,40 @@
+module mount(h=10,d=8.3,t=2.1){
+ difference(){
+  cylinder(d=d+(t*2),h=h,$fn=32);
+  cylinder(d=d,h=h*2,c=true,$fn=32);
+  rotate([0,0,-45])cube([d,d,h*2]);
+ }
+ module rounded(){
+  translate([(d/2)+(t/2),0,0])cylinder(d=t,h=h,$fn=12);
+ }
+ rotate([0,0,+45])rounded();
+ rotate([0,0,-45])rounded();
+}
+
+module body(h,s){
+ d=12;
+ difference() {
+    hull() {
+     cylinder(d=d,h=h,$fn=32);
+     translate([s,0,0])cylinder(h=h,d=d,$fn=32);
+    }
+    cylinder(d=9,h=h*2,c=true,$fn=32);
+    align([1,0,0])cube(30);
+   }
+}
+
+module support(){
+ s=18;
+ h=10;
+ h2=25;
+ difference() {
+  union(){
+   rotate([0,0,180])mount(h=h);
+   body(h,s);
+   translate([s,0,0])cylinder(h=h2,r=6,$fn=32);
+  }
+  translate([s,0,0])cylinder(h=(h2-2),r=4,$fn=32);
+ }
+}
+
+support();
