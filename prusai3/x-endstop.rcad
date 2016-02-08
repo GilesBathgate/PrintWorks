@@ -1,0 +1,56 @@
+nozzle_dia=0.4;
+layer_height=0.3;
+
+function pi() = 3.141592;
+function width(d,h) = h-(pi()*((h*h)-(d*d)))/(4*h);
+function arc(r,t) = 0.5*(t+sqrt((t*t)+4*(r*r)));
+function polyhole(r,n,t) = arc(r,t)/cos(180/n);
+
+function sides(d,t) = ceil(180 / acos((d-t)/d));
+
+module hole(d,h)
+{
+  n=sides(d,0.1);
+  t=width(nozzle_dia,layer_height);
+  pr=polyhole(d/2,n,t);
+  translate([0,0,-1])cylinder(r=pr,h=h+2,$fn=n);    
+}
+
+module mount(h=10,d=8.3,t=2.1){
+ difference(){
+  cylinder(d=d+(t*2),h=h,$fn=32);
+  cylinder(d=d,h=h*2,c=true,$fn=32);
+  rotate([0,0,-45])cube([d,d,h*2]);
+ }
+ module rounded(){
+  translate([(d/2)+(t/2),0,0])cylinder(d=t,h=h,$fn=12);
+ }
+ rotate([0,0,+45])rounded();
+ rotate([0,0,-45])rounded();
+}
+
+module clip(){
+rod_distance = 45;
+thick=2.5;
+// Bottom pushfit rod
+rotate([-90,0,0])mount(h=10,d=8.3,t=2.1);
+// Top pushfit rod
+translate(v=[0,0,rod_distance])rotate([-90,0,0])mount(h=10,d=8.3,t=2.1);
+
+translate([-8.3/2,0,-10])cube([-thick,10,rod_distance+12]);
+
+difference(){
+translate([-((8.3/2)+6),-13,-10])cube([-thick,23,20]);
+translate([0,-9,5])rotate([0,-90,0])hole(2.2,50);
+translate([0,-9,-5])rotate([0,-90,0])hole(2.2,50);
+}
+
+translate([-(8.3/2),0,-10])cube([-(6+thick),10,-thick]);
+translate([-(8.3/2),0,10])cube([-(6+thick),10,thick]);
+
+//translate([0,0,-10])cube([6,-10,20]);
+}
+
+translate([0,0,10])
+rotate([90,0,0])
+mirror([0,1,0])clip();
